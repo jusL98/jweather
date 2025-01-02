@@ -63,10 +63,12 @@ class WeatherApp(QWidget):
 
         # Align Widgets In Center
         self.city_label.setAlignment(Qt.AlignCenter)
-        self.city_input.setAlignment(Qt.AlignCenter)
+        #self.city_input.setAlignment(Qt.AlignCenter)
         self.temperature_label.setAlignment(Qt.AlignCenter)
         self.emoji_label.setAlignment(Qt.AlignCenter)
         self.description_label.setAlignment(Qt.AlignLeft)
+
+        self.city_input.setPlaceholderText("Enter a city")
 
         # Set Stylesheet
         self.city_label.setObjectName("city_label")
@@ -78,8 +80,6 @@ class WeatherApp(QWidget):
         self.date_label.setObjectName("date_label")
         self.time_label.setObjectName("time_label")
 
-
-
         self.setStyleSheet("""
             QLabel, QPushButton{
                 font-family: calibri;
@@ -89,11 +89,12 @@ class WeatherApp(QWidget):
                 font-weight: bold;
             }
             QLineEdit#city_input{
-                font-size: 15px;
+                font-size: 25px;
                 margin: 0px 0px 0px 50px;
+                padding: 0px 10px
             }
-            QLineEdit#get_weather_button{
-                background-color: green;
+            QPushButton#get_weather_button{
+                font-size: 23px;
             }
             QLabel#temperature_label{
                 font-size: 75px;
@@ -109,13 +110,11 @@ class WeatherApp(QWidget):
             QLabel#date_label{
                 font-size: 30px;
                 margin: 0px 0px 0px 50px;
-                background: orange;
             }
             QLabel#time_label{
                 font-size: 20px;
                 color: grey;
                 margin: 0px 0px 0px 50px;
-                background: orange;
             }
             
         """)
