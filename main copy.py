@@ -9,21 +9,12 @@ class WeatherApp(QWidget):
     def __init__(self):
         super().__init__()
         # Initialize Widgets
-        self.city_label = QLabel("NEW YORK", self)
-        self.emoji_label = QLabel("☀️",self)
-        self.description_label = QLabel("SUNNY", self)
-        self.temperature_label = QLabel("25°C",self)
-
-        self.date_label = QLabel("Jan 2, 2025",self)
-        self.time_label = QLabel("12:00 PM", self)
-
-
-        #print(datetime.datetime.fromtimestamp(data["dt"]).strftime("%b %d, %Y"))
-        #print(datetime.datetime.fromtimestamp(data["dt"]).strftime("%I:%M %p"))
-
-        date = QLabel()
+        self.city_label = QLabel("Enter city name: ", self)
         self.city_input = QLineEdit(self)
-        self.get_weather_button = QPushButton("GO", self)
+        self.get_weather_button = QPushButton("✔️", self)
+        self.temperature_label = QLabel("0°C",self)
+        self.emoji_label = QLabel("⛈️",self)
+        self.description_label = QLabel("Stormy", self)
 
         self.initUI()
         
@@ -31,42 +22,25 @@ class WeatherApp(QWidget):
         self.setWindowTitle("Weather App")
 
         # Layout Manager
-        main_hbox = QHBoxLayout()
-        
-        # Left Side
-        left_vbox = QVBoxLayout()
-        left_vbox.addWidget(self.city_label)
-        weather_hbox = QHBoxLayout()
-        weather_hbox.addWidget(self.emoji_label)
-        temp_desc_vbox = QVBoxLayout()
-        temp_desc_vbox.addWidget(self.description_label)
-        temp_desc_vbox.addWidget(self.temperature_label)
-        weather_hbox.addItem(temp_desc_vbox)
-        left_vbox.addItem(weather_hbox)
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.city_label)
 
-        # Right Side
-        right_vbox = QVBoxLayout()
-        date_time_vbox = QVBoxLayout()
-        date_time_vbox.addWidget(self.date_label)
-        date_time_vbox.addWidget(self.time_label)
-        right_vbox.addItem(date_time_vbox)
-        city_input_hbox = QHBoxLayout()
-        city_input_hbox.addWidget(self.city_input)
-        city_input_hbox.addWidget(self.get_weather_button)
-        right_vbox.addItem(city_input_hbox)
-        
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.city_input)
+        hbox.addWidget(self.get_weather_button)
+        vbox.addItem(hbox)
 
-        # Combine Left/Right
-        main_hbox.addItem(left_vbox)
-        main_hbox.addItem(right_vbox)
-        self.setLayout(main_hbox)
+        vbox.addWidget(self.temperature_label)
+        vbox.addWidget(self.emoji_label)
+        vbox.addWidget(self.description_label)
+        self.setLayout(vbox)
 
         # Align Widgets In Center
         self.city_label.setAlignment(Qt.AlignCenter)
         self.city_input.setAlignment(Qt.AlignCenter)
         self.temperature_label.setAlignment(Qt.AlignCenter)
         self.emoji_label.setAlignment(Qt.AlignCenter)
-        self.description_label.setAlignment(Qt.AlignLeft)
+        self.description_label.setAlignment(Qt.AlignCenter)
 
         # Set Stylesheet
         self.city_label.setObjectName("city_label")
@@ -75,10 +49,6 @@ class WeatherApp(QWidget):
         self.temperature_label.setObjectName("temperature_label")
         self.emoji_label.setObjectName("emoji_label")
         self.description_label.setObjectName("description_label")
-        self.date_label.setObjectName("date_label")
-        self.time_label.setObjectName("time_label")
-
-
 
         self.setStyleSheet("""
             QLabel, QPushButton{
@@ -86,45 +56,32 @@ class WeatherApp(QWidget):
             }
             QLabel#city_label{
                 font-size: 40px;
-                font-weight: bold;
+                font-style: italic;
             }
             QLineEdit#city_input{
-                font-size: 15px;
-                margin: 0px 0px 0px 50px;
+                font-size: 40px;
             }
-            QLineEdit#get_weather_button{
-                background-color: green;
+            QPushButton#get_weather_button{
+                font-size: 30px;
+                font-weight: bold;
             }
             QLabel#temperature_label{
                 font-size: 75px;
-                font-weight: bold;
             }
             QLabel#emoji_label{
                 font-size: 100px;
                 font-family: Segoe UI Emoji;
             }
             QLabel#description_label{
-                font-size: 30px;
+                font-size: 50px;
             }
-            QLabel#date_label{
-                font-size: 30px;
-                margin: 0px 0px 0px 50px;
-                background: orange;
-            }
-            QLabel#time_label{
-                font-size: 20px;
-                color: grey;
-                margin: 0px 0px 0px 50px;
-                background: orange;
-            }
-            
         """)
 
-        #self.get_weather_button.clicked.connect(self.get_weather)
+        self.get_weather_button.clicked.connect(self.get_weather)
 
     def get_weather(self):
         api_key = "d63fc3d821befae4fd586ad520fe81f3"
-        #city = self.city_input.text()
+        city = self.city_input.text()
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
 
         try:
@@ -134,6 +91,9 @@ class WeatherApp(QWidget):
             
             if data["cod"] == 200:
                 self.display_weather(data)
+                print(data["dt"])
+                #print(datetime.datetime.fromtimestamp(data["dt"]).strftime("%b %d, %Y"))
+                #print(datetime.datetime.fromtimestamp(data["dt"]).strftime("%I:%M %p"))
         
         except requests.exceptions.HTTPError as http_error: # Handles HTTP not found.
             match response.status_code :
