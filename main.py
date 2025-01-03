@@ -1,30 +1,35 @@
 import sys
 import requests
 from PyQt5.QtWidgets import (QApplication, QWidget, QLabel,
-                             QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout)
-from PyQt5.QtCore import Qt
+                             QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QMessageBox)
+from PyQt5 import QtCore
+from PyQt5.QtCore import Qt, QTimer
 import datetime
+from datetime import datetime as dt
 
 class WeatherApp(QWidget):
     def __init__(self):
         super().__init__()
         # Initialize Widgets
-        self.city_label = QLabel("NEW YORK", self)
-        self.emoji_label = QLabel("☀️",self)
-        self.description_label = QLabel("SUNNY", self)
-        self.temperature_label = QLabel("25°C",self)
+        self.city_label = QLabel("JWEATHER APP", self)
+        self.emoji_label = QLabel("⛅",self)
+        self.description_label = QLabel("ENTER A CITY", self)
+        self.temperature_label = QLabel(self)
 
-        self.date_label = QLabel("Jan 2, 2025",self)
-        self.time_label = QLabel("12:00 PM", self)
+        self.date_label = QLabel(f"{dt.now().strftime("%b %d, %Y")}", self)
+        self.time_label = QLabel("Last Updated: 00:00", self)
+        self.refresh_label = QLabel("(Refreshes every 10 mins)", self)
 
         date = QLabel()
         self.city_input = QLineEdit(self)
         self.get_weather_button = QPushButton("GO", self)
 
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.get_weather)
         self.initUI()
         
     def initUI(self):
-        self.setWindowTitle("Weather App")
+        self.setWindowTitle("JWEATHER APP")
 
         # Layout Manager
         main_hbox = QHBoxLayout()
@@ -45,12 +50,12 @@ class WeatherApp(QWidget):
         date_time_vbox = QVBoxLayout()
         date_time_vbox.addWidget(self.date_label)
         date_time_vbox.addWidget(self.time_label)
+        date_time_vbox.addWidget(self.refresh_label)
         right_vbox.addItem(date_time_vbox)
         city_input_hbox = QHBoxLayout()
         city_input_hbox.addWidget(self.city_input)
         city_input_hbox.addWidget(self.get_weather_button)
         right_vbox.addItem(city_input_hbox)
-        
 
         # Combine Left/Right
         main_hbox.addItem(left_vbox)
@@ -59,22 +64,27 @@ class WeatherApp(QWidget):
 
         # Align Widgets In Center
         self.city_label.setAlignment(Qt.AlignCenter)
-        #self.city_input.setAlignment(Qt.AlignCenter)
-        self.temperature_label.setAlignment(Qt.AlignCenter)
         self.emoji_label.setAlignment(Qt.AlignCenter)
-        self.description_label.setAlignment(Qt.AlignLeft)
+        self.description_label.setAlignment(Qt.AlignBottom)
+        self.temperature_label.setAlignment(Qt.AlignTop)
+        self.date_label.setAlignment(Qt.AlignBottom)
+        self.time_label.setAlignment(Qt.AlignTop)
+        self.refresh_label.setAlignment(Qt.AlignTop)
+        self.city_input.setAlignment(Qt.AlignTop)
 
+        # Line Edit Placeholder Text
         self.city_input.setPlaceholderText("Enter a city")
 
         # Set Stylesheet
         self.city_label.setObjectName("city_label")
-        self.city_input.setObjectName("city_input")
-        self.get_weather_button.setObjectName("get_weather_button")
-        self.temperature_label.setObjectName("temperature_label")
         self.emoji_label.setObjectName("emoji_label")
         self.description_label.setObjectName("description_label")
+        self.temperature_label.setObjectName("temperature_label")
         self.date_label.setObjectName("date_label")
         self.time_label.setObjectName("time_label")
+        self.refresh_label.setObjectName("refresh_label")
+        self.city_input.setObjectName("city_input")
+        self.get_weather_button.setObjectName("get_weather_button")
 
         self.setStyleSheet("""
             QLabel, QPushButton{
@@ -84,24 +94,16 @@ class WeatherApp(QWidget):
                 font-size: 40px;
                 font-weight: bold;
             }
-            QLineEdit#city_input{
-                font-size: 25px;
-                margin: 0px 0px 0px 50px;
-                padding: 0px 10px
-            }
-            QPushButton#get_weather_button{
-                font-size: 23px;
-            }
-            QLabel#temperature_label{
-                font-size: 75px;
-                font-weight: bold;
-            }
             QLabel#emoji_label{
                 font-size: 100px;
                 font-family: Segoe UI Emoji;
             }
             QLabel#description_label{
                 font-size: 30px;
+            }
+            QLabel#temperature_label{
+                font-size: 75px;
+                font-weight: bold;
             }
             QLabel#date_label{
                 font-size: 30px;
@@ -112,12 +114,29 @@ class WeatherApp(QWidget):
                 color: grey;
                 margin: 0px 0px 0px 50px;
             }
-            
+            QLabel#refresh_label{
+                font-size: 15px;
+                color: grey;
+                margin: 0px 0px 0px 50px;
+            }
+            QLineEdit#city_input{
+                font-size: 25px;
+                margin: 0px 0px 0px 50px;
+                padding: 0px 10px
+            }
+            QPushButton#get_weather_button{
+                font-size: 23px;
+            }
         """)
 
-        self.get_weather_button.clicked.connect(self.get_weather)
+        self.get_weather_button.clicked.connect(self.start_weather_updates) # Refreshes weather data every 10 minutes after entering a city.
+        
+    def start_weather_updates(self):
+        self.get_weather()
+        self.timer.start(10 * 60 * 1000)  # 10 minutes in milliseconds
 
     def get_weather(self):
+        #   print('Refreshed')
         api_key = "d63fc3d821befae4fd586ad520fe81f3"
         city = self.city_input.text()
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
@@ -131,42 +150,54 @@ class WeatherApp(QWidget):
                 self.display_weather(data)
                 self.city_label.setText(city.upper())
                 self.date_label.setText(datetime.datetime.fromtimestamp(data["dt"]).strftime("%b %d, %Y"))
-                self.time_label.setText(datetime.datetime.fromtimestamp(data["dt"]).strftime("%I:%M %p"))
+                self.time_label.setText(f"Last Updated: {datetime.datetime.fromtimestamp(data["dt"]).strftime("%I:%M %p")}")
         
+        # Error Handling
         except requests.exceptions.HTTPError as http_error: # Handles HTTP not found.
             match response.status_code :
                 case 400:
-                    self.display_error("Bad request\nPlease check your input")
+                    self.display_error("BAD REQUEST Please check your input")
                 case 401:
-                    self.display_error("Unauthorized:\nInvalid API key")
+                    self.display_error("UNAUTHORIZED: Invalid API key")
                 case 403:
-                    self.display_error("Forbidden:\nAccess is denied")
+                    self.display_error("FORBIDDEN: Access is denied")
                 case 404:
-                    self.display_error("Not found:\nCity not found")
+                    self.display_error("NOT FOUND: City not found")
                 case 500:
-                    self.display_error("Internal Server Error:\nPlease try again later")
+                    self.display_error("INTERNAL SERVER ERROR: Please try again later")
                 case 502:
-                    self.display_error("Bad Gateway:\nInvalid response from the server")
+                    self.display_error("BAD GATEWAY: Invalid response from the server")
                 case 503:
-                    self.display_error("Service Unavailable:\nServer is down")
+                    self.display_error("SERVICE UNAVAILABLE: Server is down")
                 case 504:
-                    self.display_error("Gateway Timeout:\nNo response form the server")
+                    self.display_error("GATEWAY TIMEOUT: No response form the server")
                 case _:
-                    self.display_error(f"HTTP error occurred:\n{http_error}")
+                    self.display_error(f"HTTP ERROR: {http_error}")
         except requests.exceptions.ConnectionError:
-            self.display_error("Connect Error:\nCheck your internet connection")
+            self.display_error("CONNECTION ERROR: Check your internet connection")
         except requests.exceptions.Timeout:
-            self.display_error("Timeout Error:\nThe request timed out")
+            self.display_error("TIMEOUT ERROR: The request timed out")
         except requests.exceptions.TooManyRedirects:
-            self.display_error("Too Many Redirects:\nCheck the URL")
+            self.display_error("TOO MANY REDIRECTS: Check the URL")
         except requests.exceptions.RequestException as req_error: # Handles network problems and invalid urls.
-            self.display_error(f"Request Error:\n{req_error}")
+            self.display_error(f"REQUEST ERROR: {req_error}")
 
     def display_error(self, message):
-        self.temperature_label.setStyleSheet("font-size: 30px;")
-        self.temperature_label.setText(message)
-        self.emoji_label.clear()
-        self.description_label.clear()
+        self.city_label.setText("JWEATHER APP")
+        self.emoji_label.setText("⛅")
+        self.description_label.setText("ENTER A CITY")
+        self.temperature_label.clear()
+        self.date_label.clear()
+        self.time_label.clear()
+        self.city_input.clear()
+
+        # Error Message Popup
+        dialog = QMessageBox()
+        dialog.setText(message)
+        dialog.setWindowTitle("Error")
+        dialog.setIcon(QMessageBox.Icon.Warning)
+        dialog.setStandardButtons(QMessageBox.StandardButton.Retry)
+        dialog.exec()
 
     def display_weather(self, data):
         # Temperature
@@ -174,7 +205,6 @@ class WeatherApp(QWidget):
         temperature_c = temperature_k - 273.15 # Convert temperature to Celsius.
         temperature_f = (temperature_k * 9/5) - 459.67 # Convert temperature to Fahrenheit.
 
-        self.temperature_label.setStyleSheet("font-size: 75px;")
         self.temperature_label.setText(f"{temperature_c:.0f}°C")
 
         #  Weather Emoji
@@ -183,7 +213,7 @@ class WeatherApp(QWidget):
 
         # Weather Description
         description = data["weather"][0]["description"]
-        self.description_label.setText(description)
+        self.description_label.setText(description.upper())
 
     @staticmethod
     def get_weather_emoji(weather_id):
