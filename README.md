@@ -1,5 +1,5 @@
 <p align="center">
-   <img width="1000" alt="image" src="https://gist.github.com/user-attachments/assets/ee8e9eb3-ebc4-41f4-8480-a3f483de1426"/>
+   <img width="1000" alt="image" src="https://github.com/user-attachments/assets/dac223ea-5b3e-4b80-8282-c6b6cd95671c"/>
 </p>
 
 # JWeather App
