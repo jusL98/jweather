@@ -10,7 +10,7 @@ This weather app is a GUI where the user inputs a city and the temperature and w
 
 ## Technologies Used
 - Python 3.13
-- PyQT5 GUI
+- PyQt5 GUI
 - OpenWeather API
 
 ## Installation
