@@ -130,13 +130,14 @@ class WeatherApp(QWidget):
         """)
 
         self.get_weather_button.clicked.connect(self.start_weather_updates) # Refreshes weather data every 10 minutes after entering a city.
+        self.city_input.returnPressed.connect(self.start_weather_updates) # Refreshes weather data every 10 minutes after entering a city.
         
     def start_weather_updates(self):
         self.get_weather()
         self.timer.start(10 * 60 * 1000)  # 10 minutes in milliseconds
 
     def get_weather(self):
-        #   print('Refreshed')
+        print('Refreshed')
         api_key = "d63fc3d821befae4fd586ad520fe81f3"
         city = self.city_input.text()
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
