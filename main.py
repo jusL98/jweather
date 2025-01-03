@@ -17,10 +17,6 @@ class WeatherApp(QWidget):
         self.date_label = QLabel("Jan 2, 2025",self)
         self.time_label = QLabel("12:00 PM", self)
 
-
-        #print(datetime.datetime.fromtimestamp(data["dt"]).strftime("%b %d, %Y"))
-        #print(datetime.datetime.fromtimestamp(data["dt"]).strftime("%I:%M %p"))
-
         date = QLabel()
         self.city_input = QLineEdit(self)
         self.get_weather_button = QPushButton("GO", self)
@@ -119,11 +115,11 @@ class WeatherApp(QWidget):
             
         """)
 
-        #self.get_weather_button.clicked.connect(self.get_weather)
+        self.get_weather_button.clicked.connect(self.get_weather)
 
     def get_weather(self):
         api_key = "d63fc3d821befae4fd586ad520fe81f3"
-        #city = self.city_input.text()
+        city = self.city_input.text()
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
 
         try:
@@ -133,6 +129,9 @@ class WeatherApp(QWidget):
             
             if data["cod"] == 200:
                 self.display_weather(data)
+                self.city_label.setText(city.upper())
+                self.date_label.setText(datetime.datetime.fromtimestamp(data["dt"]).strftime("%b %d, %Y"))
+                self.time_label.setText(datetime.datetime.fromtimestamp(data["dt"]).strftime("%I:%M %p"))
         
         except requests.exceptions.HTTPError as http_error: # Handles HTTP not found.
             match response.status_code :
@@ -174,7 +173,7 @@ class WeatherApp(QWidget):
         temperature_k = data["main"]["temp"] # Access temperature in Kelvin.
         temperature_c = temperature_k - 273.15 # Convert temperature to Celsius.
         temperature_f = (temperature_k * 9/5) - 459.67 # Convert temperature to Fahrenheit.
-        
+
         self.temperature_label.setStyleSheet("font-size: 75px;")
         self.temperature_label.setText(f"{temperature_c:.0f}°C")
 
