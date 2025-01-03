@@ -27,12 +27,14 @@ To install the JWeather App, follow these steps:
 
 3. Create and activate a virtual environment:
    - On Windows:
+
    ```bash
    python -m venv .venv
    .\.venv\Scripts\activate
    ```
 
    - On macOS and Linux:
+   
    ```bash
    python -m venv .venv
    source .venv/bin/activate
