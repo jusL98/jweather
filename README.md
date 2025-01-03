@@ -25,13 +25,26 @@ To install the JWeather App, follow these steps:
 
 2. Ensure that you have python running on your system.
 
-3. Install the required dependencies:
+3. Create and activate a virtual environment:
+   - On Windows:
+   ```bash
+   python -m venv .venv
+   .\.venv\Scripts\activate
+   ```
+
+   - On macOS and Linux:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+
+4. Install the required dependencies:
 
    ```bash
    pip install -r requirements.txt 
    ```
 
-4. Run the JWeather App.
+5. Run the JWeather App.
    ```bash
    python main.py
    ```
