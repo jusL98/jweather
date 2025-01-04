@@ -51,7 +51,7 @@ To install the JWeather App, follow these steps:
    python main.py
    ```
 
-5. **Alternatively, download and run the jweatherapp.exe file.**
+6. **Alternatively, download and run the jweatherapp.exe file.**
 
 ## Usage
 1. Enter a city in the text input.
