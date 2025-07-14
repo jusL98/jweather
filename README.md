@@ -113,7 +113,7 @@ To install JWeather, follow these steps:
    python main.py
    ```
 
-10. Alternatively, download and run the `jweather.exe` file.
+10. Alternatively, download and run the `jweatherapp.exe` file.
 
 ## Usage
 
