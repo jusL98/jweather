@@ -5,7 +5,7 @@
 This GUI is a weather application to search and stay updated every 10 minutes of the weather (temperature and condition) of any inputted city through a desktop GUI.
 
 <p align="left">
-   <img width="600" alt="image" src="https://gist.github.com/user-attachments/assets/ee8e9eb3-ebc4-41f4-8480-a3f483de1426"/>
+   <img width="600" alt="image" src="https://github.com/user-attachments/assets/d1ac88ae-ea9e-43b5-81bc-170ada32d296"/>
 </p>
 
 ## Description
@@ -20,8 +20,8 @@ JWeather contains several weather features including:
 ## Built With
 
 - [Python 3.13](https://www.python.org/): Programming language for complete functionality
-- [PyQt5](https://pypi.org/project/PyPDF2/): Library for creating the GUI
-- [OpenWeather](https://pypi.org/project/PyPDF2/): API (free) for retrieving weather data
+- [PyQt5](https://pypi.org/project/PyQt5/): Library for creating the GUI
+- [OpenWeather](https://home.openweathermap.org/api_keys): API (free) for retrieving weather data
 
 ## Quick Start
 
