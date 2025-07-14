@@ -6,10 +6,13 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QTimer
 import datetime
 from datetime import datetime as dt
+from dotenv import load_dotenv
+import os
 
 class WeatherApp(QWidget):
     def __init__(self):
         super().__init__()
+        load_dotenv()
         # Initialize Widgets
         self.city_label = QLabel("JWEATHER APP", self)
         self.emoji_label = QLabel("⛅",self)
@@ -138,7 +141,7 @@ class WeatherApp(QWidget):
 
     def get_weather(self):
         print('Refreshed')
-        api_key = "d63fc3d821befae4fd586ad520fe81f3"
+        api_key = os.environ.get("JWEATHER_API_KEY")
         city = self.city_input.text()
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
 
