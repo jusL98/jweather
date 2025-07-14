@@ -67,36 +67,53 @@ To install JWeather, follow these steps:
    pip install -r requirements.txt
    ```
 
-### Setup
-
-To use the demo PDF files, skip the following setup steps. Otherwise, to merge your own files, proceed.
-
-5. Open `main.py`:
-   - On Windows:
-     ```bash
-     notepad main.py
-     ```
-   - On macOS or Linux
-     ```bash
-     open main.py
-     ```
-6. Edit the file's configuration variables to input your own PDF file paths, output PDF name and output PDF file path.
+5. Copy and edit the .env file:
    ```bash
-   # ENTER PDF FILE PATHS, OUTPUT PDF NAME, AND OUTPUT PDF PATH HERE.
-   pdf_list = ["C:/Users/justi/Downloads/test1.pdf","test2.pdf"] # format with forward slashes and no trailing slash OR use relative file paths by placing the file in the same directory as this script
-   output_pdf_name = "merged.pdf"
-   output_pdf_path = "" # format with forward slashes and no trailing slash OR leave blank for output file destination to be the same directory as this script
-   # ---------------------------------------------------------------
+   cp .env.example .env
+   ```
+
+
+### Setup
+6. Open the .env file:
+
+   - On Windows:
+
+      ```bash
+      notepad .env
+      ```
+
+   - On macOS or Linux
+
+      ```bash
+      open .env
+      ```
+
+7. Retrieve an API key from https://home.openweathermap.org/api_keys.
+
+8. Use your API key for the variable `API_KEY`.
+
+   | Variable           | Description                            | Example                           |
+   | ------------------ | -------------------------------------- | --------------------------------- |
+   | API_KEY            | API key from OpenWeather               | `API_KEY=your_actual_api_key_here`|
+
+   Don't add spaces around the = sign in the variables.
+
+   Don't wrap values in quotes unless they contain spaces.
+
+   ex. `.env`
+
+   ```
+   API_KEY=your_actual_api_key_here
    ```
 
 ### Run
 
-6. Run JWeather:
+9. Run JWeather:
    ```bash
    python main.py
    ```
 
-7. Alternatively, download and run the `jweather.exe` file.
+10. Alternatively, download and run the `jweather.exe` file.
 
 ## Usage
 
@@ -120,7 +137,8 @@ To use the demo PDF files, skip the following setup steps. Otherwise, to merge y
 │   ├── main.py                        # contains main program code and logic
 │   ├── requirements.txt               # list of required dependencies for easy installation
 │   ├── jweather.exe                   # .exe file for compiled version of JWeather
-│   └── TBD
+│   ├── .env                           # contains environment variables for configuration
+│   └── .env.example                   # sample .env file
 ```
 
 ## Acknowledgements

@@ -14,7 +14,7 @@ class WeatherApp(QWidget):
         super().__init__()
         load_dotenv()
         # Initialize Widgets
-        self.city_label = QLabel("JWEATHER APP", self)
+        self.city_label = QLabel("JWEATHER", self)
         self.emoji_label = QLabel("⛅",self)
         self.description_label = QLabel("ENTER A CITY", self)
         self.temperature_label = QLabel(self)
@@ -32,7 +32,7 @@ class WeatherApp(QWidget):
         self.initUI()
         
     def initUI(self):
-        self.setWindowTitle("JWEATHER APP")
+        self.setWindowTitle("JWEATHER")
 
         # Layout Manager
         main_hbox = QHBoxLayout()
@@ -141,7 +141,7 @@ class WeatherApp(QWidget):
 
     def get_weather(self):
         print('Refreshed')
-        api_key = os.environ.get("JWEATHER_API_KEY")
+        api_key = os.environ.get("API_KEY")
         city = self.city_input.text()
         url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}"
 
@@ -187,7 +187,7 @@ class WeatherApp(QWidget):
             self.display_error(f"REQUEST ERROR: {req_error}")
 
     def display_error(self, message):
-        self.city_label.setText("JWEATHER APP")
+        self.city_label.setText("JWEATHER")
         self.emoji_label.setText("⛅")
         self.description_label.setText("ENTER A CITY")
         self.temperature_label.clear()
