@@ -49,17 +49,17 @@ To install JWeather, follow these steps:
 
    - On Windows:
 
-   ```bash
-   python -m venv .venv
-   .\.venv\Scripts\activate
-   ```
+      ```bash
+      python -m venv .venv
+      .\.venv\Scripts\activate
+      ```
 
    - On macOS and Linux:
 
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   ```
+      ```bash
+      python -m venv .venv
+      source .venv/bin/activate
+      ```
 
 4. Install the required dependencies:
 
